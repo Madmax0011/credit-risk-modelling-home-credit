@@ -1,0 +1,9 @@
+metric,value
+validation_applicants,61503.0
+average_probability_of_default,0.3585653156500607
+actual_default_rate,0.08072776937710356
+approval_rate,0.09897078191307741
+manual_review_rate,0.3801928361218152
+decline_rate,0.5208363819651074
+total_expected_loss,5678645380.110263
+loss_given_default_assumption,0.45
