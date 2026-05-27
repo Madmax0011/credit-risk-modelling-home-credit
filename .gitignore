@@ -28,4 +28,4 @@ reports/gain_lift_table.csv
 .ipynb_checkpoints/
 
 # System files
-.DS_Store
+.DS_Storereports/*.csv
