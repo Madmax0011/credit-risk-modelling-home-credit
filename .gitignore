@@ -1,0 +1,31 @@
+# Python environment
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# Raw and processed data - do not upload Kaggle data
+data/raw/
+data/processed/
+
+# Trained models - keep excluded unless you decide to deploy scoring publicly
+models/
+*.pkl
+*.joblib
+
+# Row-level derived outputs - do not upload applicant-level prediction data
+reports/validation_predictions.csv
+reports/business_decision_table.csv
+reports/business_expected_loss_table.csv
+reports/business_expected_loss_summary.csv
+reports/business_expected_loss_table.csv
+reports/business_threshold_strategy_comparison.csv
+reports/threshold_performance.csv
+reports/decile_table.csv
+reports/gain_lift_table.csv
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# System files
+.DS_Store

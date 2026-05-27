@@ -1,0 +1,9 @@
+table_name,rows,columns
+bureau_balance,27299925,3
+installments_payments,13605401,8
+pos_cash_balance,10001358,8
+credit_card_balance,3840312,23
+bureau,1716428,17
+previous_application,1670214,37
+application_train,307511,122
+application_test,48744,121
