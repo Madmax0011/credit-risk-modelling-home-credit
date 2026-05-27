@@ -1,6 +1,0 @@
-metric,value
-model_file,/Users/shriyanshnautiyal/Downloads/credit-risk-modelling-home-credit/models/credit_risk_model.pkl
-feature_count,618
-shap_sample_size,5000
-top_feature_by_model_importance,APP_ANNUITY_TO_CREDIT_RATIO
-top_feature_by_shap_importance,EXT_SOURCE_2

@@ -1,4 +1,0 @@
-recommended_decision,risk_band,applicant_count,average_probability_of_default,applicant_share
-Approve,Low Risk,6087,0.06977914454305888,0.09897078191307741
-Manual Review,Medium Risk,23383,0.19551021794682066,0.3801928361218152
-Decline,High Risk,32033,0.532465942288939,0.5208363819651074
