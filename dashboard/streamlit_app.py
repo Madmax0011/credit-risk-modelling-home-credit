@@ -378,6 +378,13 @@ def build_model_input(model, main_inputs: dict, adv_inputs: dict,
         if row.get("INSTALL_AMT_PAYMENT_sum", 0) == 0:
             row["INSTALL_AMT_PAYMENT_sum"] = credit * 0.3
 
+    # Median fill for identity features (age-derived) — applies when the
+    # advanced panel left these at 0 (the default "use auto-derived value")
+    if row.get("DAYS_ID_PUBLISH", 0) == 0:
+        row["DAYS_ID_PUBLISH"] = -age * 365.25 * 0.30
+    if row.get("DAYS_REGISTRATION", 0) == 0:
+        row["DAYS_REGISTRATION"] = -age * 365.25 * 0.40
+
     return pd.DataFrame([row]).reindex(columns=feature_names, fill_value=0)
 
 
