@@ -91,11 +91,11 @@ ADVANCED_FEATURES = [
         "feature_name": "BUREAU_BUREAU_DEBT_TO_CREDIT_RATIO_max",
         "label": "Bureau debt utilisation — highest account",
         "tooltip": "The highest credit utilisation ratio across all bureau accounts. "
-                   "Above 70% is considered high risk by most lenders. "
-                   "Population median: 30%.",
+                   "Above 0.70 (70%) is considered high risk by most lenders. "
+                   "Population median: 0.30 (30%).",
         "widget": "slider", "min": 0.0, "max": 1.0, "step": 0.01,
         "default": 0.30,
-        "format": "%.0f%%", "scale": 100,
+        "format": None, "scale": 1,
     },
     {
         "section": "Bureau Credit History",
@@ -133,11 +133,11 @@ ADVANCED_FEATURES = [
         "feature_name": "INSTALL_INSTALL_LATE_PAYMENT_FLAG_mean",
         "label": "Late payment rate on previous loans",
         "tooltip": "Proportion of instalment payments on previous loans that were made "
-                   "after the due date. 0% means every payment was on time. "
-                   "Population median: 2%.",
+                   "after the due date. 0 means every payment was on time. "
+                   "Population median: 0.02 (2%).",
         "widget": "slider", "min": 0.0, "max": 0.5, "step": 0.01,
         "default": 0.02,
-        "format": "%.0f%%", "scale": 100,
+        "format": None, "scale": 1,
     },
     {
         "section": "Payment Behaviour",
@@ -169,7 +169,7 @@ ADVANCED_FEATURES = [
                    "Default: 0 (no prior refusals).",
         "widget": "slider", "min": 0.0, "max": 1.0, "step": 0.01,
         "default": 0.0,
-        "format": "%.0f%%", "scale": 100,
+        "format": None, "scale": 1,
     },
     {
         "section": "Previous Loan Applications",
