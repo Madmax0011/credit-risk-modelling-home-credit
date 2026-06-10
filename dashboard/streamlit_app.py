@@ -77,6 +77,13 @@ def load_model(path: Path):
 #   unit          : display suffix (%, years, days, etc.) — informational only
 #   section       : grouping header
 
+
+# Advanced feature definitions.
+# All defaults are neutral population-median values — not preset-specific.
+# This ensures manual entry produces consistent, unbiased scoring regardless
+# of which preset was previously active. Preset buttons only affect the main
+# form fields (income, credit, age, EXT scores etc.), not the advanced panel.
+
 ADVANCED_FEATURES = [
     # ── Bureau history ────────────────────────────────────────────────────────
     {
@@ -84,21 +91,20 @@ ADVANCED_FEATURES = [
         "feature_name": "BUREAU_BUREAU_DEBT_TO_CREDIT_RATIO_max",
         "label": "Bureau debt utilisation — highest account",
         "tooltip": "The highest credit utilisation ratio across all bureau accounts. "
-                   "Above 70% is considered high risk by most lenders.",
+                   "Above 70% is considered high risk by most lenders. "
+                   "Population median: 30%.",
         "widget": "slider", "min": 0.0, "max": 1.0, "step": 0.01,
-        "default_prime": 0.22, "default_near": 0.45,
-        "default_sub": 0.75, "default_thin": None,
+        "default": 0.30,
         "format": "%.0f%%", "scale": 100,
     },
     {
         "section": "Bureau Credit History",
         "feature_name": "BUREAU_AMT_CREDIT_SUM_mean",
         "label": "Average bureau credit limit across all accounts",
-        "tooltip": "Mean credit limit (in local currency units) across all accounts held "
-                   "at credit bureaus. Higher values typically indicate an established credit profile.",
+        "tooltip": "Mean credit limit across all bureau accounts. "
+                   "Left at 0 to allow dynamic scaling to the applicant's income.",
         "widget": "number", "min": 0, "max": 5000000, "step": 10000,
-        "default_prime": 270000, "default_near": 202500,
-        "default_sub": 135000, "default_thin": None,
+        "default": 0,
         "format": None, "scale": 1,
     },
     {
@@ -106,22 +112,20 @@ ADVANCED_FEATURES = [
         "feature_name": "BUREAU_DAYS_CREDIT_max",
         "label": "Most recent bureau credit account opened (years ago)",
         "tooltip": "How many years ago the applicant's most recently opened bureau "
-                   "credit account was registered. A recent account suggests active credit use.",
+                   "credit account was registered. Population median: 1 year.",
         "widget": "number", "min": 0, "max": 20, "step": 1,
-        "default_prime": 1, "default_near": 1,
-        "default_sub": 1, "default_thin": None,
-        "format": None, "scale": -365.25,  # convert years -> negative days
+        "default": 1,
+        "format": None, "scale": -365.25,
     },
     {
         "section": "Bureau Credit History",
         "feature_name": "BUREAU_DAYS_CREDIT_ENDDATE_max",
         "label": "Latest bureau credit end date (years from now)",
         "tooltip": "How many years in the future the latest bureau credit account "
-                   "is scheduled to close. Longer remaining terms indicate ongoing credit commitments.",
+                   "is scheduled to close. Population median: 2 years.",
         "widget": "number", "min": 0, "max": 15, "step": 1,
-        "default_prime": 2, "default_near": 2,
-        "default_sub": 1, "default_thin": None,
-        "format": None, "scale": 365.25,  # convert years -> positive days
+        "default": 2,
+        "format": None, "scale": 365.25,
     },
     # ── Payment behaviour ─────────────────────────────────────────────────────
     {
@@ -129,10 +133,10 @@ ADVANCED_FEATURES = [
         "feature_name": "INSTALL_INSTALL_LATE_PAYMENT_FLAG_mean",
         "label": "Late payment rate on previous loans",
         "tooltip": "Proportion of instalment payments on previous loans that were made "
-                   "after the due date. 0% means every payment was on time.",
+                   "after the due date. 0% means every payment was on time. "
+                   "Population median: 2%.",
         "widget": "slider", "min": 0.0, "max": 0.5, "step": 0.01,
-        "default_prime": 0.01, "default_near": 0.08,
-        "default_sub": 0.25, "default_thin": None,
+        "default": 0.02,
         "format": "%.0f%%", "scale": 100,
     },
     {
@@ -140,10 +144,9 @@ ADVANCED_FEATURES = [
         "feature_name": "INSTALL_INSTALL_PAYMENT_DELAY_DAYS_mean",
         "label": "Average payment delay (days)",
         "tooltip": "Mean number of days by which instalment payments were made after "
-                   "the scheduled due date across all previous loans.",
+                   "the scheduled due date. Population median: 0 days.",
         "widget": "number", "min": 0, "max": 30, "step": 1,
-        "default_prime": 0, "default_near": 2,
-        "default_sub": 8, "default_thin": None,
+        "default": 0,
         "format": None, "scale": 1,
     },
     {
@@ -151,10 +154,9 @@ ADVANCED_FEATURES = [
         "feature_name": "INSTALL_AMT_PAYMENT_sum",
         "label": "Total repayments made across all previous loans",
         "tooltip": "Cumulative amount repaid across all previous instalment loans. "
-                   "A higher figure reflects a longer or larger borrowing history.",
+                   "Left at 0 to allow dynamic scaling to the applicant's credit amount.",
         "widget": "number", "min": 0, "max": 5000000, "step": 10000,
-        "default_prime": 81000, "default_near": 121500,
-        "default_sub": 189000, "default_thin": None,
+        "default": 0,
         "format": None, "scale": 1,
     },
     # ── Previous applications ─────────────────────────────────────────────────
@@ -163,10 +165,10 @@ ADVANCED_FEATURES = [
         "feature_name": "PREV_NAME_CONTRACT_STATUS_Refused_ratio",
         "label": "Previous applications refused (proportion)",
         "tooltip": "Share of the applicant's prior loan applications that were refused "
-                   "by lenders. A high refusal rate is a strong negative signal.",
+                   "by lenders. A high refusal rate is a strong negative signal. "
+                   "Default: 0 (no prior refusals).",
         "widget": "slider", "min": 0.0, "max": 1.0, "step": 0.01,
-        "default_prime": 0.0, "default_near": 0.1,
-        "default_sub": 0.4, "default_thin": None,
+        "default": 0.0,
         "format": "%.0f%%", "scale": 100,
     },
     {
@@ -174,10 +176,9 @@ ADVANCED_FEATURES = [
         "feature_name": "PREV_CNT_PAYMENT_mean",
         "label": "Average previous loan term (months)",
         "tooltip": "Mean scheduled repayment term in months across the applicant's "
-                   "previous loan applications.",
+                   "previous loan applications. Population median: 24 months.",
         "widget": "number", "min": 0, "max": 60, "step": 1,
-        "default_prime": 24, "default_near": 24,
-        "default_sub": 24, "default_thin": None,
+        "default": 24,
         "format": None, "scale": 1,
     },
     # ── Identity and registration ─────────────────────────────────────────────
@@ -187,21 +188,19 @@ ADVANCED_FEATURES = [
         "label": "Years since identity document was issued",
         "tooltip": "How many years ago the applicant's current identity document "
                    "(passport or national ID) was issued. An ID issued very recently "
-                   "can be a risk flag.",
+                   "can be a risk flag. Default: derived from applicant age.",
         "widget": "number", "min": 0, "max": 30, "step": 1,
-        "default_prime": 13, "default_near": 10,
-        "default_sub": 8, "default_thin": 7,
-        "format": None, "scale": -365.25,  # convert years -> negative days
+        "default": 0,   # 0 = use dynamic age-based fill in build_model_input
+        "format": None, "scale": -365.25,
     },
     {
         "section": "Identity and Registration",
         "feature_name": "DAYS_REGISTRATION",
         "label": "Years since residential registration",
         "tooltip": "How many years ago the applicant registered at their current "
-                   "or most recent address. Longer registration suggests residential stability.",
+                   "or most recent address. Default: derived from applicant age.",
         "widget": "number", "min": 0, "max": 40, "step": 1,
-        "default_prime": 18, "default_near": 14,
-        "default_sub": 11, "default_thin": 10,
+        "default": 0,   # 0 = use dynamic age-based fill in build_model_input
         "format": None, "scale": -365.25,
     },
     {
@@ -209,10 +208,10 @@ ADVANCED_FEATURES = [
         "feature_name": "DAYS_LAST_PHONE_CHANGE",
         "label": "Years since phone number last changed",
         "tooltip": "How many years ago the applicant last changed their registered "
-                   "phone number. Frequent changes can indicate instability.",
+                   "phone number. Frequent changes can indicate instability. "
+                   "Population median: 2 years.",
         "widget": "number", "min": 0, "max": 10, "step": 1,
-        "default_prime": 2, "default_near": 2,
-        "default_sub": 1, "default_thin": 2,
+        "default": 2,
         "format": None, "scale": -365.25,
     },
 ]
@@ -336,12 +335,26 @@ def build_model_input(model, main_inputs: dict, adv_inputs: dict,
     })
 
     # Apply advanced feature overrides (already converted to model units)
-    for feat_name, model_value in adv_inputs.items():
+    # Values of 0 for fields that support dynamic fill are skipped —
+    # the dynamic median fill below handles them instead.
+    DYNAMIC_FILL_FIELDS = {
+        "BUREAU_AMT_CREDIT_SUM_mean",
+        "INSTALL_AMT_PAYMENT_sum",
+        "DAYS_ID_PUBLISH",
+        "DAYS_REGISTRATION",
+    }
+    for feat_name, val_tuple in adv_inputs.items():
+        # adv_inputs stores (user_value, scale) tuples
+        user_val, scale = val_tuple
+        model_val = user_val * scale
+        # Skip if zero and this field has a dynamic fill fallback
+        if user_val == 0 and feat_name in DYNAMIC_FILL_FIELDS:
+            continue
         if zero_bureau and feat_name.startswith("BUREAU_"):
             continue
         if zero_install and feat_name.startswith("INSTALL_"):
             continue
-        row[feat_name] = model_value
+        row[feat_name] = model_val
 
     # Median fill for bureau features not covered by advanced panel
     if not zero_bureau:
@@ -575,8 +588,6 @@ def display_score_applicant(model):
                     "characteristic of a thin-file applicant."
                 )
 
-            adv_key = p["adv_defaults"]
-
             # Search bar
             search_term = st.text_input(
                 "Search features",
@@ -608,16 +619,14 @@ def display_score_applicant(model):
                 st.markdown(f"**{section}**")
                 if disabled:
                     st.caption("Not applicable — no history on file for this profile.")
-                    # Still register zero values so they are available
+                    # Register zero tuples — build_model_input will zero these out
                     for feat in section_feats:
-                        adv_vals[feat["feature_name"]] = 0.0
+                        adv_vals[feat["feature_name"]] = (0.0, feat["scale"])
                     continue
 
                 cols_adv = st.columns(2)
                 for idx, feat in enumerate(section_feats):
-                    raw_default = feat.get(f"default_{adv_key}")
-                    if raw_default is None:
-                        raw_default = feat["min"]
+                    raw_default = float(feat.get("default", feat["min"]))
 
                     with cols_adv[idx % 2]:
                         if feat["widget"] == "slider":
@@ -625,7 +634,7 @@ def display_score_applicant(model):
                                 feat["label"],
                                 min_value=float(feat["min"]),
                                 max_value=float(feat["max"]),
-                                value=float(raw_default),
+                                value=raw_default,
                                 step=float(feat["step"]),
                                 help=feat["tooltip"],
                             )
@@ -634,13 +643,13 @@ def display_score_applicant(model):
                                 feat["label"],
                                 min_value=float(feat["min"]),
                                 max_value=float(feat["max"]),
-                                value=float(raw_default),
+                                value=raw_default,
                                 step=float(feat["step"]),
                                 help=feat["tooltip"],
                             )
-                        # Convert user value to model units
-                        model_val = user_val * feat["scale"]
-                        adv_vals[feat["feature_name"]] = model_val
+                        # Store raw user value — conversion happens in build_model_input
+                        # A value of 0 means "use dynamic fill" for fields that support it
+                        adv_vals[feat["feature_name"]] = (user_val, feat["scale"])
 
         submitted = st.form_submit_button("Score Applicant", use_container_width=True)
 
